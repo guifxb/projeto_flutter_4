@@ -29,4 +29,8 @@ flutter:
 
   assets:
     # Add assets from the images directory to the application.
-    - assets/images/
+    - assets/images/logo_black.png
+    - assets/images/logo_white.png
+    - assets/images/godzilla.jpg
+    - assets/images/kungfu-panda.jpg
+    - assets/images/pulp-fiction.jpg
