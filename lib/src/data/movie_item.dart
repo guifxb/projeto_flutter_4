@@ -6,6 +6,7 @@ class MovieItem {
   bool isFavorite;
   final int duration;
   final int year;
+  final String category;
 
   MovieItem({
     required this.id,
@@ -15,5 +16,6 @@ class MovieItem {
     this.isFavorite = false,
     required this.duration,
     required this.year,
+    required this.category,
   });
 }

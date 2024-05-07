@@ -10,14 +10,10 @@ import '../data/movie_repository.dart';
 import 'movie_details_view.dart';
 
 class MovieListView extends StatelessWidget {
-  static final MovieRepository repository = MovieRepository();
+  final MovieRepository repository = MovieRepository();
   final SettingsController settingsController;
-  final List<MovieItem> items = repository.moviesList();
 
-  MovieListView({
-    Key? key,
-    required this.settingsController,
-  }) : super(key: key);
+  MovieListView({super.key, required this.settingsController});
 
   AssetImage checkThemeMode(BuildContext context) {
     final Brightness currentBrightness = Theme.of(context).brightness;
@@ -28,106 +24,109 @@ class MovieListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final categories = repository.moviesList();
+    final categoryNames = [
+      "Ação",
+      "Animação",
+      "Drama",
+      "Comédia",
+      "Sci-Fi",
+      "Crime"
+    ];
 
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: SizedBox(
-          height: AppBar().preferredSize.height*0.7,
+          height: AppBar().preferredSize.height * 0.7,
           child: Image(
-            image: checkThemeMode(context),),
+            image: checkThemeMode(context),
+          ),
         ),
-
-          actions: [
+        actions: [
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SettingsView(controller: settingsController),
+                  builder: (context) =>
+                      SettingsView(controller: settingsController),
                 ),
               );
             },
           ),
         ],
       ),
-      body: _buildBody(),
+      body: _buildBody(categories, categoryNames),
       bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
 
-  Widget _buildBody() {
-    return SafeArea(
-      child: ListView(
-        children: [
-          _buildCategoryListView('Ação', items),
-          _buildCategoryListView('Comédia', items),
-          _buildCategoryListView('Drama', items),
-          _buildCategoryListView('Animação', items),
-          // Adicione mais categorias conforme necessário
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCategoryListView(String category, List<MovieItem> items) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: Text(category, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-        ),
-        Container(
-          height: 250,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: items.length,
-            itemBuilder: (BuildContext context, int index) {
-              final item = items[index];
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MovieDetailsView(movie: item),
+  Widget _buildBody(
+      List<List<MovieItem>> categories, List<String> categoryNames) {
+    return ListView.builder(
+      itemCount: categories.length,
+      itemBuilder: (context, index) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Text(
+                categoryNames[index],
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(
+              height: 340,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: categories[index].length,
+                itemBuilder: (context, innerIndex) {
+                  final item = categories[index][innerIndex];
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MovieDetailsView(movie: item),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                      width: 160,
+                      child: Column(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(18.0),
+                            child: Image.asset(
+                              item.posterPath,
+                              fit: BoxFit.fill,
+                              height: 250,
+                            ),
+                          ),
+                          const SizedBox(height: 12.0),
+                          Text(
+                            item.title,
+                            style: const TextStyle(fontSize: 16),
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },
-                child: Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(20.0),
-                              child: Image.asset(
-                                item.posterPath,
-                                fit: BoxFit.cover,
-                                height: 200,
-                              ),
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              item.title,
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
