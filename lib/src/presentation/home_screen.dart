@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_filmes/src/presentation/movie_list_view.dart';
+import 'package:flutter_filmes/src/presentation/search/favorite_view.dart';
 import 'package:flutter_filmes/src/presentation/search/search_view.dart';
 import 'package:flutter_filmes/src/settings/settings_controller.dart';
 import 'package:flutter_filmes/src/settings/settings_view.dart';
@@ -25,7 +26,7 @@ class HomeScreenState extends State<HomeScreen> {
   final List<Widget> _pages = [
     MovieListView(),
     const SearchView(),
-    const Center(child: Text('Favoritos', style: TextStyle(fontSize: 60))),
+    const FavoriteView(),
   ];
 
   @override

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../data/movie_item.dart';
+import '../mock/mock.dart';
 
 class BigPoster extends StatefulWidget {
   const BigPoster({
@@ -31,6 +32,23 @@ class BigPosterState extends State<BigPoster> {
       isFavorite = !isFavorite;
       widget.movie.isFavorite = isFavorite;
     });
+    _updateFavoriteStatus(widget.movie.id, isFavorite);
+  }
+
+  void _updateFavoriteStatus(int movieId, bool isFavorite) {
+    void updateList(List<MovieItem> list) {
+      for (var movie in list) {
+        if (movie.id == movieId) {
+          movie.isFavorite = isFavorite;
+        }
+      }
+    }
+    updateList(actionList);
+    updateList(animsList);
+    updateList(dramaList);
+    updateList(crimeList);
+    updateList(scifiList);
+    updateList(comedyList);
   }
 
   @override
