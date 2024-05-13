@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../data/movie_item.dart';
 
-class BigPoster extends StatelessWidget {
+class BigPoster extends StatefulWidget {
   const BigPoster({
     super.key,
     required this.movie,
@@ -14,6 +14,26 @@ class BigPoster extends StatelessWidget {
   final String heroTag;
 
   @override
+  BigPosterState createState() => BigPosterState();
+}
+
+class BigPosterState extends State<BigPoster> {
+  late bool isFavorite;
+
+  @override
+  void initState() {
+    super.initState();
+    isFavorite = widget.movie.isFavorite;
+  }
+
+  void toggleFavorite() {
+    setState(() {
+      isFavorite = !isFavorite;
+      widget.movie.isFavorite = isFavorite;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     Color iconColor = theme.brightness == Brightness.dark ? Colors.white : Colors.black;
@@ -22,7 +42,7 @@ class BigPoster extends StatelessWidget {
       child: Stack(
         children: [
           Hero(
-            tag: heroTag,
+            tag: widget.heroTag,
             child: Container(
               foregroundDecoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -35,7 +55,7 @@ class BigPoster extends StatelessWidget {
                 ),
               ),
               child: Image.asset(
-                movie.posterPath,
+                widget.movie.posterPath,
                 width: MediaQuery.of(context).size.width,
                 fit: BoxFit.cover,
               ),
@@ -47,15 +67,15 @@ class BigPoster extends StatelessWidget {
             bottom: 0,
             child: ListTile(
               title: Text(
-                movie.title,
+                widget.movie.title,
                 style: theme.textTheme.headlineLarge,
               ),
               subtitle: Text(
-                movie.year.toString(),
+                widget.movie.year.toString(),
                 style: theme.textTheme.bodyLarge,
               ),
               trailing: Text(
-                "${(movie.duration ~/ 60)}h ${(movie.duration % 60)}m",
+                "${(widget.movie.duration ~/ 60)}h ${(widget.movie.duration % 60)}m",
                 style: theme.textTheme.bodyLarge,
               ),
             ),
@@ -76,12 +96,10 @@ class BigPoster extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {
-                    movie.isFavorite = !movie.isFavorite;
-                  },
+                  onTap: toggleFavorite,
                   child: Icon(
-                    icon,
-                    size: 30,
+                    isFavorite ? Icons.favorite : Icons.favorite_border,
+                    size: 50,
                     color: Colors.red,
                   ),
                 ),
