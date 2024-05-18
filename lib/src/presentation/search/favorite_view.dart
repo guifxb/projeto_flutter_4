@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../data/movie_item.dart';
-import '../../mock/mock.dart';
+import '../../data/model/movie_item.dart';
 import 'movie_grid_view.dart';
 
 class FavoriteView extends StatefulWidget {
@@ -21,12 +20,7 @@ class FavoriteViewState extends State<FavoriteView> {
 
   void _filterMovies() {
     final allMovies = [
-      ...actionList,
-      ...animsList,
-      ...dramaList,
-      ...crimeList,
-      ...scifiList,
-      ...comedyList,
+
     ];
     final uniqueMovies = <int, MovieItem>{};
 

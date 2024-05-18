@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../data/movie_item.dart';
-import '../mock/mock.dart';
+import 'package:flutter_filmes/src/data/model/favorites_list.dart';
+import '../data/model/movie_item.dart';
 
 class BigPoster extends StatefulWidget {
-  const BigPoster({
+  BigPoster({
     super.key,
     required this.movie,
     required this.icon,
@@ -13,6 +13,7 @@ class BigPoster extends StatefulWidget {
   final MovieItem movie;
   final IconData icon;
   final String heroTag;
+  FavoritesList favoriteList = FavoritesList();
 
   @override
   BigPosterState createState() => BigPosterState();
@@ -24,31 +25,14 @@ class BigPosterState extends State<BigPoster> {
   @override
   void initState() {
     super.initState();
-    isFavorite = widget.movie.isFavorite;
+    isFavorite = widget.favoriteList.contains(widget.movie.id);
   }
 
   void toggleFavorite() {
     setState(() {
       isFavorite = !isFavorite;
-      widget.movie.isFavorite = isFavorite;
+      widget.favoriteList.toggle(widget.movie.id);
     });
-    _updateFavoriteStatus(widget.movie.id, isFavorite);
-  }
-
-  void _updateFavoriteStatus(int movieId, bool isFavorite) {
-    void updateList(List<MovieItem> list) {
-      for (var movie in list) {
-        if (movie.id == movieId) {
-          movie.isFavorite = isFavorite;
-        }
-      }
-    }
-    updateList(actionList);
-    updateList(animsList);
-    updateList(dramaList);
-    updateList(crimeList);
-    updateList(scifiList);
-    updateList(comedyList);
   }
 
   @override
@@ -72,8 +56,8 @@ class BigPosterState extends State<BigPoster> {
                   ],
                 ),
               ),
-              child: Image.asset(
-                widget.movie.posterPath,
+              child: Image.network(
+                'https://image.tmdb.org/t/p/w500${widget.movie.posterPath}',
                 width: MediaQuery.of(context).size.width,
                 fit: BoxFit.cover,
               ),
@@ -89,11 +73,11 @@ class BigPosterState extends State<BigPoster> {
                 style: theme.textTheme.headlineLarge,
               ),
               subtitle: Text(
-                widget.movie.year.toString(),
+                widget.movie.releaseDate,
                 style: theme.textTheme.bodyLarge,
               ),
               trailing: Text(
-                "${(widget.movie.duration ~/ 60)}h ${(widget.movie.duration % 60)}m",
+                widget.movie.voteAverage.toString(),
                 style: theme.textTheme.bodyLarge,
               ),
             ),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_filmes/src/presentation/search/movie_grid_view.dart';
-import '../../data/movie_item.dart';
-import '../../mock/mock.dart';
+
+import '../../data/model/movie_item.dart';
+
 
 class SearchView extends StatefulWidget {
   const SearchView({super.key});
@@ -31,12 +32,7 @@ class SearchViewState extends State<SearchView> {
     final query = _searchController.text.toLowerCase();
     if (query.isNotEmpty) {
       final allMovies = [
-        ...actionList,
-        ...animsList,
-        ...dramaList,
-        ...crimeList,
-        ...scifiList,
-        ...comedyList,
+
       ];
       final uniqueMovies = <int, MovieItem>{};
 
