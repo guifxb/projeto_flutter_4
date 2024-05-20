@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import '../data/movie_item.dart';
+import '../data/model/favorites_list.dart';
+import '../data/model/movie_item.dart';
 import 'big_poster.dart';
 
 class MovieDetailsView extends StatelessWidget {
   final MovieItem movie;
   final String heroTag;
+  FavoritesList favoriteList = FavoritesList();
 
-  const MovieDetailsView({super.key, required this.movie, required this.heroTag});
+  MovieDetailsView({super.key, required this.movie, required this.heroTag});
 
   IconData get icon =>
-      movie.isFavorite ? Icons.favorite : Icons.favorite_border;
+      favoriteList.contains(movie.id) ? Icons.favorite : Icons.favorite_border;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class MovieDetailsView extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
-                movie.synopsis,
+                movie.overview,
                 style: Theme.of(context).textTheme.bodyMedium,
                 textAlign: TextAlign.justify,
                 softWrap: true,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../data/model/movie_item.dart';
 import '../data/movie_repository.dart';
 import 'categories_list_widget.dart';
 
@@ -9,7 +10,7 @@ class MovieListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final categories = repository.moviesList();
+    final categories = repository.getNowPlayingMovies(language: 'pt_BR');
     final categoryNames = [
       "Ação",
       "Animação",
@@ -20,8 +21,24 @@ class MovieListView extends StatelessWidget {
     ];
 
     return Scaffold(
-      body: CategoriesListWidget(
-          categories: categories, categoryNames: categoryNames),
+      body: FutureBuilder<List<MovieItem>>(
+        future: repository.getNowPlayingMovies(language: 'pt_BR'),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (snapshot.hasData) {
+            final movies = snapshot.data!;
+            return CategoriesListWidget(
+              categories: [movies], // Transforme em uma lista de listas
+              categoryNames: categoryNames,
+            );
+          } else {
+            return const Center(child: Text('No data available'));
+          }
+        },
+      ),
     );
   }
 }
