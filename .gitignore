@@ -1,3 +1,6 @@
+# Key
+/lib/src/data/api_key.dart
+
 # Miscellaneous
 *.class
 *.log

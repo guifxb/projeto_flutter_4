@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_filmes/src/presentation/movie_list_view.dart';
-import 'package:flutter_filmes/src/presentation/search/favorite_view.dart';
+
+import 'package:flutter_filmes/src/presentation/favorite/favorite_view.dart';
 import 'package:flutter_filmes/src/presentation/search/search_view.dart';
-import 'package:flutter_filmes/src/settings/settings_controller.dart';
 import 'package:flutter_filmes/src/settings/settings_view.dart';
 
+import 'movie_list_view.dart';
+
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key, required this.settingsController});
-  final SettingsController settingsController;
+  const HomeScreen({super.key});
 
   @override
   HomeScreenState createState() => HomeScreenState();
@@ -51,7 +51,7 @@ class HomeScreenState extends State<HomeScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SettingsView(controller: widget.settingsController,),
+                  builder: (context) => const SettingsView(),
                 ),
               );
             },

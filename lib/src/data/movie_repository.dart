@@ -1,17 +1,31 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter_filmes/src/data/api.dart';
 import 'package:flutter_filmes/src/data/model/movie_item.dart';
 
-class MovieRepository {
+import 'model/favorites_list.dart';
 
+class MovieRepository {
   final http.Client _client = http.Client();
 
-  Future<List<MovieItem>> getNowPlayingMovies({String language = 'pt_BR', int page = 1}) async {
-    final String url = '${Const.baseUrl}/movie/now_playing?language=$language&page=$page&api_key=${Const.key}';
+  static const baseUrl = Const.baseUrl;
+  static final apiKey = Const.key;
+  static const language = 'pt-BR';
+  final FavoritesList _favoritesList = FavoritesList();
+
+  Future<List<MovieItem>> getNowPlayingMovies({int page = 1}) async {
+    final params = {
+      'language': language,
+      'page': page.toString(),
+      'api_key': apiKey,
+    };
+
+    const path = '/3/movie/now_playing';
+    final uri = Uri.http(baseUrl, path, params);
     final response = await _client.get(
-      Uri.parse(url),
+      uri,
       headers: {
         'accept': 'application/json',
       },
@@ -25,4 +39,44 @@ class MovieRepository {
       throw Exception('Erro ao obter os dados da API');
     }
   }
+
+  Future<MovieItem> getMovieById(
+    int movieId,
+  ) async {
+    final params = {
+      'language': language,
+      'api_key': apiKey,
+    };
+    final path = '/3/movie/$movieId';
+    final uri = Uri.http(baseUrl, path, params);
+    final response = await _client.get(
+      uri,
+      headers: {
+        'accept': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      return MovieItem.fromJson(jsonResponse);
+    } else {
+      throw Exception('Erro ao obter os dados da API');
+    }
+  }
+
+  Future<List<MovieItem>> getFavoriteMovies() async {
+    List<MovieItem> favorites = [];
+    for (var movieId in _favoritesList.favoriteMovieIds) {
+      try {
+        MovieItem movie = await getMovieById(movieId.toInt());
+        favorites.add(movie);
+      } catch (e) {
+        if (kDebugMode) {
+          print(e);
+        }
+      }
+    }
+    return favorites;
+  }
+
 }
