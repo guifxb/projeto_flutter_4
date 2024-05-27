@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../cubit/favorite_cubit.dart';
 import '../../data/model/movie_item.dart';
-import '../movie_details_view.dart';
+import '../home/movie_details_view.dart';
 
 class MovieGridView extends StatelessWidget {
   final List<MovieItem> filteredMovies;
@@ -33,16 +35,18 @@ class MovieGridView extends StatelessWidget {
                   heroTag: heroTag,
                 ),
               ),
-            );
+            ).then((_) {
+              context.read<FavoriteCubit>().fetchFavorites();
+            });
           },
           child: Hero(
             tag: heroTag,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(6.0),
-              child: Image.asset(
-                movie.posterPath,
-                fit: BoxFit.cover, // Adjust fit as needed
-                height: 400.0,
+              child: Image.network(
+                'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+                fit: BoxFit.fill,
+                height: 250,
               ),
             ),
           ),

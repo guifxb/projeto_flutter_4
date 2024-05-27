@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_filmes/src/data/model/favorites_list.dart';
-import '../data/model/movie_item.dart';
+import '../../data/model/movie_item.dart';
 
 class BigPoster extends StatefulWidget {
   BigPoster({
@@ -25,13 +25,13 @@ class BigPosterState extends State<BigPoster> {
   @override
   void initState() {
     super.initState();
-    isFavorite = widget.favoriteList.contains(widget.movie.id);
+    isFavorite = widget.favoriteList.isFavorite(widget.movie.id);
   }
 
   void toggleFavorite() {
     setState(() {
       isFavorite = !isFavorite;
-      widget.favoriteList.toggle(widget.movie.id);
+      widget.favoriteList.toggleFavorite(widget.movie.id);
     });
   }
 

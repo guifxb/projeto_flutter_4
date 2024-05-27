@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../data/model/movie_item.dart';
-import '../data/movie_repository.dart';
+import '../../data/model/movie_item.dart';
+import '../../data/movie_repository.dart';
 import 'categories_list_widget.dart';
 
 class MovieListView extends StatelessWidget {
@@ -10,9 +10,9 @@ class MovieListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final categories = repository.getNowPlayingMovies(language: 'pt_BR');
+    final categories = repository.getNowPlayingMovies();
     final categoryNames = [
-      "Ação",
+      "Em Cartaz",
       "Animação",
       "Drama",
       "Comédia",
@@ -22,20 +22,20 @@ class MovieListView extends StatelessWidget {
 
     return Scaffold(
       body: FutureBuilder<List<MovieItem>>(
-        future: repository.getNowPlayingMovies(language: 'pt_BR'),
+        future: categories,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(child: Text('Erro: ${snapshot.error}'));
           } else if (snapshot.hasData) {
             final movies = snapshot.data!;
             return CategoriesListWidget(
-              categories: [movies], // Transforme em uma lista de listas
+              categories: [movies],
               categoryNames: categoryNames,
             );
           } else {
-            return const Center(child: Text('No data available'));
+            return const Center(child: Text('Nenhum item encontrado'));
           }
         },
       ),

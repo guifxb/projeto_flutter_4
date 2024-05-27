@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../data/model/movie_item.dart';
+import '../../data/model/movie_item.dart';
 import 'movie_details_view.dart';
 
 class CategoriesListWidget extends StatelessWidget {

@@ -10,7 +10,7 @@ class MovieItem {
   final bool video;
   final num voteAverage;
 
-  MovieItem( {
+  MovieItem({
     required this.backdropPath,
     required this.genreIds,
     required this.id,
@@ -23,15 +23,22 @@ class MovieItem {
     required this.voteAverage,
   });
 
-  MovieItem.fromJson(Map<String, dynamic> json)
-      : backdropPath = json['backdrop_path'],
-        genreIds = (json['genre_ids'] as List).cast<int>(),
-        id = json['id'],
-        originalTitle = json['original_title'],
-        overview = json['overview'],
-        posterPath = json['poster_path'],
-        releaseDate = json['release_date'],
-        title = json['title'],
-        video = json['video'],
-        voteAverage = json['vote_average'];
+  factory MovieItem.fromJson(Map<String, dynamic> json) {
+    List<int> parseGenres(List<dynamic> genres) {
+      return genres.map((genre) => genre['id'] as int).toList();
+    }
+
+    return MovieItem(
+      backdropPath: json['backdrop_path'] as String? ?? '',
+      genreIds: parseGenres(json['genres'] as List<dynamic>? ?? []),
+      id: json['id'] as num,
+      originalTitle: json['original_title'] as String? ?? '',
+      overview: json['overview'] as String? ?? '',
+      posterPath: json['poster_path'] as String? ?? '',
+      releaseDate: json['release_date'] as String? ?? '',
+      title: json['title'] as String? ?? '',
+      video: json['video'] as bool? ?? false,
+      voteAverage: json['vote_average'] as num? ?? 0,
+    );
+  }
 }
