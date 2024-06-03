@@ -27,7 +27,6 @@ class MovieItem {
     List<int> parseGenres(List<dynamic> genres) {
       return genres.map((genre) => genre['id'] as int).toList();
     }
-
     return MovieItem(
       backdropPath: json['backdrop_path'] as String? ?? '',
       genreIds: parseGenres(json['genres'] as List<dynamic>? ?? []),

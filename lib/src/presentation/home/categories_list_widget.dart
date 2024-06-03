@@ -1,27 +1,29 @@
 import 'package:flutter/material.dart';
-
 import '../../data/model/movie_item.dart';
 import 'movie_details_view.dart';
 
 class CategoriesListWidget extends StatelessWidget {
-  final List<List<MovieItem>> categories;
-  final List<String> categoryNames;
+  final Map<String, List<MovieItem>> categories;
 
-  const CategoriesListWidget(
-      {required this.categories, required this.categoryNames, super.key});
+  const CategoriesListWidget({required this.categories, super.key});
 
   @override
   Widget build(BuildContext context) {
+    final categoryNames = categories.keys.toList();
+
     return ListView.builder(
       itemCount: categories.length,
       itemBuilder: (context, index) {
+        final categoryName = categoryNames[index];
+        final movies = categories[categoryName]!;
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Text(
-                categoryNames[index],
+                categoryName,
                 style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
@@ -29,9 +31,9 @@ class CategoriesListWidget extends StatelessWidget {
               height: 340,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: categories[index].length,
+                itemCount: movies.length,
                 itemBuilder: (context, innerIndex) {
-                  final item = categories[index][innerIndex];
+                  final item = movies[innerIndex];
                   final heroTag = '$index-${item.posterPath}';
 
                   return GestureDetector(

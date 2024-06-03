@@ -24,7 +24,7 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   final List<Widget> _pages = [
-    MovieListView(),
+    const MovieListView(),
     const SearchView(),
     const FavoriteView(),
   ];
