@@ -9,6 +9,7 @@ class SettingsController with ChangeNotifier {
 
   late ThemeMode _themeMode;
 
+
   setThemeMode(ThemeMode themeMode) {
     _themeMode = themeMode;
   }
