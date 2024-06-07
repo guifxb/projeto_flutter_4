@@ -10,8 +10,8 @@ import 'model/favorites_list.dart';
 class MovieRepository {
   final http.Client _client = http.Client();
 
-  static const baseUrl = Const.baseUrl;
-  static final apiKey = Const.key;
+  static const baseUrl = Preferences.baseUrl;
+  static final apiKey = Preferences.key;
   static const language = 'pt-BR';
   final FavoritesList _favoritesList = FavoritesList();
 
@@ -36,7 +36,7 @@ class MovieRepository {
       final List<dynamic> results = jsonResponse['results'];
       return results.map((movieJson) => MovieItem.fromJson(movieJson)).toList();
     } else {
-      throw Exception('Erro ao obter os dados da API');
+      throw Exception('Erro ao obter os dados da API - now playing \n ${response.body}');
     }
   }
 
@@ -60,7 +60,7 @@ class MovieRepository {
       final jsonResponse = json.decode(response.body);
       return MovieItem.fromJson(jsonResponse);
     } else {
-      throw Exception('Erro ao obter os dados da API');
+      throw Exception('Erro ao obter os dados da API - get movie by id');
     }
   }
 

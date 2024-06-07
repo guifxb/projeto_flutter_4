@@ -15,7 +15,7 @@ class FavoriteView extends StatelessWidget {
         builder: (context, state) {
           if (state is FavoriteInitial) {
             context.read<FavoriteCubit>().fetchFavorites();
-            return const CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           } else if (state is FavoriteLoaded) {
             return MovieGridView(filteredMovies: state.favoriteMovies);
           } else if (state is FavoriteError) {

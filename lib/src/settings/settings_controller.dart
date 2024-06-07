@@ -5,12 +5,12 @@ import 'settings_service.dart';
 
 class SettingsController with ChangeNotifier {
   SettingsController(this._settingsService);
-
   final SettingsService _settingsService;
 
   late ThemeMode _themeMode;
 
-    setThemeMode(ThemeMode themeMode) {
+
+  setThemeMode(ThemeMode themeMode) {
     _themeMode = themeMode;
   }
 
@@ -25,9 +25,7 @@ class SettingsController with ChangeNotifier {
 
   Future<void> updateThemeMode(ThemeMode? newThemeMode) async {
     if (newThemeMode == null) return;
-
     if (newThemeMode == _themeMode) return;
-
     _themeMode = newThemeMode;
 
     notifyListeners();
