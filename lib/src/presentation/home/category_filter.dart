@@ -19,7 +19,7 @@ class CategoryFilter extends StatelessWidget {
       future: allCategoriesFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center();
         } else if (snapshot.hasError) {
           return Center(child: Text('Erro: ${snapshot.error}'));
         } else if (snapshot.hasData) {

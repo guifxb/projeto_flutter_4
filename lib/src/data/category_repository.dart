@@ -8,8 +8,8 @@ import 'package:flutter_filmes/src/data/model/movie_item.dart';
 class CategoryRepository {
   final http.Client _client = http.Client();
 
-  static const baseUrl = Const.baseUrl;
-  static final apiKey = Const.key;
+  static const baseUrl = Preferences.baseUrl;
+  static final apiKey = Preferences.key;
   static const language = 'pt-BR';
 
   Future<List<CategoryItem>> getAllCategories() async {
@@ -18,7 +18,7 @@ class CategoryRepository {
       'api_key': apiKey,
     };
     const path = '/3/genre/movie/list';
-    final uri = Uri.http(baseUrl, path, params);
+    final uri = Uri.https(baseUrl, path, params);
     final response = await _client.get(
       uri,
       headers: {

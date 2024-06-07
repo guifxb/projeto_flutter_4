@@ -10,8 +10,8 @@ import 'model/favorites_list.dart';
 class MovieRepository {
   final http.Client _client = http.Client();
 
-  static const baseUrl = Const.baseUrl;
-  static final apiKey = Const.key;
+  static const baseUrl = Preferences.baseUrl;
+  static final apiKey = Preferences.key;
   static const language = 'pt-BR';
   final FavoritesList _favoritesList = FavoritesList();
 
