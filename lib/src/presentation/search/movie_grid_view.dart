@@ -44,7 +44,7 @@ class MovieGridView extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(6.0),
               child: Image.network(
-                'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+                movie.posterPath.isEmpty ? 'assets/images/placeholder.png' : 'https://image.tmdb.org/t/p/w500${movie.posterPath}',
                 fit: BoxFit.fill,
                 height: 250,
               ),

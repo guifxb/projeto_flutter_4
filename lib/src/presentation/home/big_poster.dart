@@ -57,7 +57,7 @@ class BigPosterState extends State<BigPoster> {
                 ),
               ),
               child: Image.network(
-                'https://image.tmdb.org/t/p/w500${widget.movie.posterPath}',
+                widget.movie.posterPath.isEmpty ? 'assets/images/placeholder.png' : 'https://image.tmdb.org/t/p/w500${widget.movie.posterPath}',
                 width: MediaQuery.of(context).size.width,
                 fit: BoxFit.cover,
               ),
