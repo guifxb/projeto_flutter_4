@@ -79,4 +79,34 @@ class MovieRepository {
     return favorites;
   }
 
+  Future<List<MovieItem>> searchMoviesByName(
+    String searchQuery,
+    {int page = 1}
+  ) async {
+    final params = {
+      'query': searchQuery,
+      'language': language,
+      'api_key': apiKey,
+      'page': page.toString(),
+    };
+
+    String path = '/3/search/movie';
+    final uri = Uri.http(baseUrl, path, params);
+    print("$uri");
+    final response = await _client.get(
+      uri,
+      headers: {
+        'accept': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> jsonResponse = json.decode(response.body);
+      final List<dynamic> results = jsonResponse['results'];
+      return results.map((movieJson) => MovieItem.fromJson(movieJson)).toList();
+    } else {
+      throw Exception('Erro ao obter os dados da API - Search Query ${response.body}');
+    }
+  }
+
 }
