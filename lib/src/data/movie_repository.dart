@@ -92,7 +92,6 @@ class MovieRepository {
 
     String path = '/3/search/movie';
     final uri = Uri.http(baseUrl, path, params);
-    print("$uri");
     final response = await _client.get(
       uri,
       headers: {

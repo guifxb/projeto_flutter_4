@@ -54,7 +54,6 @@ class SearchViewState extends State<SearchView> {
           ),
         style: const TextStyle(fontSize: 16.0),
         onSubmitted: (value) {
-          print("batata quente");
           context.read<SearchCubit>().searchQuery(value);
           },
         ),
