@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../cubit/search_state.dart';
 import '../data/model/movie_item.dart';
@@ -12,16 +11,14 @@ class SearchCubit extends Cubit<SearchState> {
     movieRepository = context.read<MovieRepository>();
   }
 
-   void searchQuery(String searchInput) async {
-    emit(SearchInitial()); 
+  void searchQuery(String searchInput) async {
+    emit(SearchLoading());
     try {
-    List<MovieItem> movieList = await movieRepository.searchMoviesByName(searchInput);
-    emit(SearchLoaded(movieList));
-      }
-    catch (e) {
-      if (kDebugMode) {
-          print('Erro ao buscar filme: $e');
-        }
-      }
-   }
+      List<MovieItem> movieList =
+          await movieRepository.searchMoviesByName(searchInput);
+      emit(SearchLoaded(movieList));
+    } catch (e) {
+      emit(SearchError(e.toString()));
+    }
+  }
 }
