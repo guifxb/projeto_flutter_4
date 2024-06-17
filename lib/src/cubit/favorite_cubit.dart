@@ -38,6 +38,8 @@ class FavoriteCubit extends Cubit<FavoriteState> {
       } catch (e) {
         if (kDebugMode) {
           print('Erro ao buscar favoritos: $e');
+        } else {
+          rethrow;
         }
       }
     }
