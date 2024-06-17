@@ -10,10 +10,15 @@ environment:
   sdk: '>=3.3.1 <4.0.0'
 
 dependencies:
+  flutter_bloc: ^8.1.5
   flutter:
     sdk: flutter
+  google_fonts: 6.2.1
   flutter_localizations:
     sdk: flutter
+  http: any
+  shared_preferences: ^2.2.3
+  provider: ^6.1.2
 
 dev_dependencies:
   flutter_test:
@@ -29,4 +34,31 @@ flutter:
 
   assets:
     # Add assets from the images directory to the application.
-    - assets/images/
+ 
+    - assets/images/placeholder.png
+    - assets/images/logo_black.png
+    - assets/images/logo_white.png
+    - assets/images/godzilla.jpg
+    - assets/images/kungfu-panda.jpg
+    - assets/images/pulp-fiction.jpg
+    - assets/images/DezesseisQuadras.png
+    - assets/images/APequenaSereia2023.jpg
+    - assets/images/AVelhaGuarda.png
+    - assets/images/AVelhaGuarda2.png
+    - assets/images/CIDADEDEDEUS.png
+    - assets/images/Divertida-Mente.png
+    - assets/images/Donzela.png
+    - assets/images/Emruinas.png
+    - assets/images/frozen.jpg
+    - assets/images/Interstellar.jpg
+    - assets/images/JogosVorazes.png
+    - assets/images/lift.png
+    - assets/images/maze-runner-a-cura-mortal.jpg
+    - assets/images/maze-runner-correr-ou-morrer.jpg
+    - assets/images/maze-runner-prova-de-fogo.jpg
+    - assets/images/odiariodanossapaixao.jpg
+    - assets/images/Oppenheimer.jpg
+    - assets/images/RayaeoultimoDragao.jpg
+    - assets/images/TropadeElite.jpg
+    - assets/images/WALL-E.jpg
+    - assets/images/ABelaeaFera.jpg

@@ -1,49 +1,111 @@
-import 'movie_item.dart';
+import 'dart:convert';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+
+import 'package:flutter_filmes/src/data/api.dart';
+import 'package:flutter_filmes/src/data/model/movie_item.dart';
+
+import 'model/favorites_list.dart';
 
 class MovieRepository {
-  List<MovieItem> _movies = [];
+  final http.Client _client = http.Client();
 
-  MovieRepository() {
-    _initMovies();
+  static const baseUrl = Preferences.baseUrl;
+  static final apiKey = Preferences.key;
+  static const language = 'pt-BR';
+  final FavoritesList _favoritesList = FavoritesList();
+
+  Future<List<MovieItem>> getNowPlayingMovies({int page = 1}) async {
+    final params = {
+      'language': language,
+      'page': page.toString(),
+      'api_key': apiKey,
+    };
+
+    const path = '/3/movie/now_playing';
+    final uri = Uri.http(baseUrl, path, params);
+    final response = await _client.get(
+      uri,
+      headers: {
+        'accept': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> jsonResponse = json.decode(response.body);
+      final List<dynamic> results = jsonResponse['results'];
+      return results.map((movieJson) => MovieItem.fromJson(movieJson)).toList();
+    } else {
+      throw Exception('Erro ao obter os dados da API - now playing \n ${response.body}');
+    }
   }
 
-  void _initMovies() {
-    _movies = [
-      MovieItem(
-          id: 1,
-          title: 'Godzilla Minus One',
-          posterPath: 'assets/images/godzilla.jpg',
-          synopsis:
-              'O filme se passa em Japão social e economicamente devastado após o término da Segunda Guerra Mundial, na qual o país saiu perdendo. A situação chega a um nível ainda mais crítico quando uma gigantesca e misteriosa criatura surge do mar para assolar o país, o temível kaiju. Sob esse pano de fundo, sentindo-se como se tivesse enganado a morte muitas vezes, está Kōichi Shikishima (Ryunosuke Kamiki), um piloto Kamikaze. E quando seu grupo é atacado na Ilha Odo, com muitos mortos pelo monstro gigantesco, uma enorme culpa pesa sobre Shikishima, agora sobrevivente. Entrando assim, em uma missão pessoal, para defender suas pessoas queridas e vingar a morte de seus companheiros, Shikishima se une a um grande grupo de veteranos de Guerra, para finalmente derrotar o monstro conhecido como Godzilla.',
-          isFavorite: false,
-          duration: 125,
-          year: 2023),
-      MovieItem(
-          id: 2,
-          title: 'Pulp Fiction',
-          posterPath: 'assets/images/pulp-fiction.jpg',
-          synopsis:
-              'Assassino que trabalha para a máfia se apaixona pela esposa de seu chefe quando é convidado a acompanhá-la, um boxeador descumpre sua promessa de perder uma luta e um casal tenta um assalto que rapidamente sai do controle.',
-          isFavorite: false,
-          duration: 154,
-          year: 1995),
-      MovieItem(
-          id: 3,
-          title: "Kung Fu Panda 4",
-          posterPath: 'assets/images/kungfu-panda.jpg',
-          synopsis:
-              'Po está prestes a tornar-se o novo líder espiritual do Vale da Paz, mas antes disso, ele deve encontrar um sucessor para se tornar o novo Guerreiro Dragão. Parece que ele encontra um em Zhen, uma raposa com muitas habilidades promissoras, mas que não gosta muito da ideia de Po treiná-lo.',
-          isFavorite: false,
-          duration: 94,
-          year: 2024)
-    ];
+  Future<MovieItem> getMovieById(
+    int movieId,
+  ) async {
+    final params = {
+      'language': language,
+      'api_key': apiKey,
+    };
+    final path = '/3/movie/$movieId';
+    final uri = Uri.http(baseUrl, path, params);
+    final response = await _client.get(
+      uri,
+      headers: {
+        'accept': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      return MovieItem.fromJson(jsonResponse);
+    } else {
+      throw Exception('Erro ao obter os dados da API - get movie by id');
+    }
   }
 
-  List<MovieItem> moviesList() {
-    return List.unmodifiable(_movies);
+  Future<List<MovieItem>> getFavoriteMovies() async {
+    List<MovieItem> favorites = [];
+    for (var movieId in _favoritesList.favoriteMovieIds) {
+      try {
+        MovieItem movie = await getMovieById(movieId.toInt());
+        favorites.add(movie);
+      } catch (e) {
+        if (kDebugMode) {
+          print(e);
+        }
+      }
+    }
+    return favorites;
   }
 
-  void toggleFavorite(int id) {
-    _movies.firstWhere((movie) => movie.id == id).isFavorite = !_movies.firstWhere((movie) => movie.id == id).isFavorite;
+  Future<List<MovieItem>> searchMoviesByName(
+    String searchQuery,
+    {int page = 1}
+  ) async {
+    final params = {
+      'query': searchQuery,
+      'language': language,
+      'api_key': apiKey,
+      'page': page.toString(),
+    };
+
+    String path = '/3/search/movie';
+    final uri = Uri.http(baseUrl, path, params);
+    final response = await _client.get(
+      uri,
+      headers: {
+        'accept': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> jsonResponse = json.decode(response.body);
+      final List<dynamic> results = jsonResponse['results'];
+      return results.map((movieJson) => MovieItem.fromJson(movieJson)).toList();
+    } else {
+      throw Exception('Erro ao obter os dados da API - Search Query ${response.body}');
+    }
   }
+
 }
