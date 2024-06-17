@@ -37,6 +37,8 @@ class CategoryCubit extends Cubit<CategoryState> {
     } catch (e) {
       if (kDebugMode) {
         print('Erro ao buscar categorias: $e');
+      } else {
+        rethrow;
       }
       return [];
     }
